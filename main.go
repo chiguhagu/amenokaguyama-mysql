@@ -31,15 +31,27 @@ func init() {
 }
 
 func main() {
-	cmd := exec.Command(
-		"mysqldef",
-		"--dry-run",
-		"-h", config.MysqlHost,
-		"-P", config.MysqlPort,
-		"-u", config.MysqlUser,
-		"-p", config.MysqlPassword,
-		"--file=./schema/init.sql",
-		config.MysqlDbName)
+	var cmd *exec.Cmd
+	if config.DisableDryRun {
+		cmd = exec.Command(
+			"mysqldef",
+			"-h", config.MysqlHost,
+			"-P", config.MysqlPort,
+			"-u", config.MysqlUser,
+			"-p", config.MysqlPassword,
+			"--file=./schema/init.sql",
+			config.MysqlDbName)
+	} else {
+		cmd = exec.Command(
+			"mysqldef",
+			"--dry-run",
+			"-h", config.MysqlHost,
+			"-P", config.MysqlPort,
+			"-u", config.MysqlUser,
+			"-p", config.MysqlPassword,
+			"--file=./schema/init.sql",
+			config.MysqlDbName)
+	}
 	b, err := cmd.Output()
 	if err != nil {
 		logger.Fatal("failed to execute mysqldef command: " + string(err.(*exec.ExitError).Stderr))

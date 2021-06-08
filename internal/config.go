@@ -9,6 +9,7 @@ type Config struct {
 	MysqlPassword   string `envconfig:"MYSQL_PASSWORD" required:"true"`
 	MysqlDbName     string `envconfig:"MYSQL_DB_NAME" required:"true"`
 	SlackWebhookUrl string `envconfig:"SLACK_WEBHOOK_URL" required:"false"`
+	DisableDryRun   bool   `envconfig:"DISABLE_DRY_RUN" default:"false"`
 }
 
 func LoadConfig() (*Config, error) {
